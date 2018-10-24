@@ -29,6 +29,25 @@ var_dump($a->get('body\weight'));
 echo "get('home\main\address'):\n";
 var_dump($a->get('home\main\address'));
 
+echo "=== modufy:";
+echo <<<EOL
+Action:
+$a->set('home\main\address',Array(
+        'street' => 'ul.push.',
+        'building' => 'kolotush',
+        'flatNo' => 0
+        ));
+";
+EOL;
+
+$a->set('home\main\address',Array(
+        'street' => 'ul.push.',
+        'building' => 'kolotush',
+	'flatNo' => 0
+        ));
+
+echo "get('home\main\address'):\n";
+var_dump($a->get('home\main\address'));
 
 
 echo "=== Dump all:\n";
