@@ -32,7 +32,7 @@ var_dump($a->get('home\main\address'));
 echo "=== modufy:";
 echo <<<EOL
 Action:
-$a->set('home\main\address',Array(
+set('home\main\address',Array(
         'street' => 'ul.push.',
         'building' => 'kolotush',
         'flatNo' => 0
