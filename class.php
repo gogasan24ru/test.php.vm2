@@ -14,7 +14,27 @@ class Singleton {
 			$cnf['password'],
 			$cnf['database']);
 		self::loadStorage($id);
+	}
+
+	public function dump_storage()
+	{
 		var_dump(self::$storage);
+	}
+
+	public function get($path)
+	{
+		$path_items=explode('\\',$path);
+		$ret=self::$storage;
+		foreach ($path_items as $item)
+		{
+			$ret=$ret[$item];
+		}
+		return $ret;
+	}
+
+	public function set($path,$data)
+	{
+
 	}
 
 	private function loadStorage($id)
