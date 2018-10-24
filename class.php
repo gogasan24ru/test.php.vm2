@@ -4,6 +4,7 @@ class Singleton {
 	private static $instance = [];
 	private static $db;
 	private static $id;
+	private static $storage = [];
 
 	private function __construct($id,$cnf)
 	{
@@ -11,8 +12,45 @@ class Singleton {
 		self::$db=mysqli_connect($cnf['host'],
 			$cnf['username'],
 			$cnf['password'],
-			$cnf['database']);//, $opt['port'], $opt['socket']);
+			$cnf['database']);
+		self::loadStorage($id);
+		var_dump(self::$storage);
 	}
+
+	private function loadStorage($id)
+	{
+                $q='SELECT storage FROM users WHERE id='.$id;
+                $storage=self::querySingle($q)['storage'];
+                self::$storage=
+                        unserialize(htmlspecialchars_decode($storage));
+                if(!is_array(self::$storage))
+                {
+                        //guess no such entry or storage damaged (why?)
+                        self::$storage=Array();
+                        self::uploadStorage();
+                }
+	}
+
+	private function uploadStorage()
+	{
+		$ser=htmlspecialchars(serialize(self::$storage));
+		$q="INSERT INTO users ".
+			" (id, storage) ".
+			" VALUES ".
+			" ( ".self::$id.",\"".$ser."\")".
+			" ON DUPLICATE KEY UPDATE ".
+			" storage = \"".$ser."\"";
+		self::$db->query($q);
+	}
+
+	private function querySingle($q)
+	{
+		$q=self::$db->query($q);
+		$ret=$q->fetch_array(MYSQLI_ASSOC);
+		$q->free();
+		return $ret;
+	}
+
 	public static function getInstance($id,$cnf)
 	{
 		if (!isset(self::$instance[$id]))
