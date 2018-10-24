@@ -32,9 +32,25 @@ class Singleton {
 		return $ret;
 	}
 
-	public function set($path,$data)
+	public function set($path,$data,&$root=NULL)
 	{
-
+		if(is_null($root))$root=self::$storage;
+		$path_items=explode('\\',$path);
+		if(count($path_items)==1)
+		{
+			$root[$path_items[0]]=$data;
+		}
+		else
+		{
+			if(!isset($root[$path_items[0]]))
+				$root[$path_items[0]]=Array();
+			self::set(implode('\\',array_slice($path_items, 1)),
+				$data,
+				$root[$path_items[0]]);
+		}
+		self::$storage=$root;
+		self::uploadStorage();
+		return;
 	}
 
 	private function loadStorage($id)
