@@ -1,6 +1,8 @@
 <?php
-$database="";
-$username="";
-$host="";
-$password="";
+$cnf=Array(
+	'database'=>"",
+	'username'=>"",
+	'host'=>"",
+	'password'=>""
+);
 ?>
